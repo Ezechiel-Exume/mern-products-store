@@ -1,74 +1,20 @@
 import express from "express";
-import mongoose from "mongoose";
-import Product from "../models/product.model.js";
+
+import {
+  createProduct,
+  deleteProduct,
+  getAllProduct,
+  updateProduct,
+} from "../controllers/product.controller.js";
 
 const router = express.Router();
 
-router.get("/", async (req, res) => {
-  try {
-    const products = await Product.find();
-    res.status(200).json({ success: true, data: products });
-  } catch (error) {
-    console.log("Error in feching products", error.message);
-    res.status(500).json({ success: false, message: "Server Error" });
-  }
-});
+router.get("/", getAllProduct);
 
-router.post("/", async (req, res) => {
-  const product = req.body;
+router.post("/", createProduct);
 
-  if (!product.name || !product.price || !product.image) {
-    return res
-      .status(400)
-      .json({ success: false, message: "Please provide all fields" });
-  }
-  const newProduct = new Product(product);
-  try {
-    await newProduct.save();
-    res.status(201).json({ succes: true, data: newProduct });
-  } catch (error) {
-    console.error("Error in Create product:", error.message);
-    res.status(500).json({ success: false, message: "Server Error" });
-  }
-});
+router.put("/:id", updateProduct);
 
-router.put("/:id", async (req, res) => {
-  const { id } = req.params;
-
-  const product = req.body;
-
-  try {
-    const updatedProduct = await Product.findByIdAndUpdate(id, product, {
-      returnDocument: "after",
-    });
-    res.status(200).json({ success: true, data: updatedProduct });
-  } catch (error) {
-    console.log("Error in updating product", error.message);
-    res.status(500).json({ success: false, message: "Server Error" });
-  }
-});
-
-router.delete("/:id", async (req, res) => {
-  const { id } = req.params;
-
-  if (!mongoose.Types.ObjectId.isValid(id)) {
-    return res.status(400).json({ success: false, message: "Invalid ID" });
-  }
-
-  try {
-    const deletedProduct = await Product.findByIdAndDelete(id);
-    if (!deletedProduct) {
-      return res
-        .status(404)
-        .json({ success: false, message: "Product not found" });
-    }
-    res
-      .status(200)
-      .json({ success: true, message: "Poduct deleted successfully" });
-  } catch (error) {
-    console.log("Error deleting product", error.message);
-    res.status(500).json({ success: false, message: "Server Error" });
-  }
-});
+router.delete("/:id", deleteProduct);
 
 export default router;
