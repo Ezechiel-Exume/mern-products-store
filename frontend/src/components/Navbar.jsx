@@ -21,7 +21,7 @@ const Navbar = () => {
             fontWeight={"bold"}
             textTransform={"uppercase"}
             textAlign={"center"}
-            background="linear-gradient(to right, cyan, blue)"
+            background="linear-gradient(to left, cyan, blue)"
             backgroundClip="text"
             color="transparent"
           >

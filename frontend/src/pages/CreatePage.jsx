@@ -84,7 +84,7 @@ const CreatePage = () => {
               value={newProduct.image}
             />
             <Button
-              colorPalette={"blue"}
+              background="linear-gradient(to left, cyan, blue)"
               w={"full"}
               onClick={handleAddNewProduct}
             >
