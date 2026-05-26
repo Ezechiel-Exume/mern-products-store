@@ -9,6 +9,7 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { useState } from "react";
+import { toaster } from "../components/ui/toaster";
 
 const CreatePage = () => {
   const [newProduct, setNewProduct] = useState({
@@ -22,7 +23,22 @@ const CreatePage = () => {
 
   const handleAddNewProduct = async () => {
     const { success, message } = await createProduct(newProduct);
-    console.log(success, message);
+
+    if (!success) {
+      toaster.create({
+        title: "Error",
+        description: message,
+        type: "error",
+        closable: true,
+      });
+    } else {
+      toaster.create({
+        title: "Success",
+        description: message,
+        type: "success",
+        closable: true,
+      });
+    }
   };
   return (
     <Container maxW={"container.sm"}>
