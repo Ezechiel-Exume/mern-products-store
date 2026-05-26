@@ -60,6 +60,7 @@ const CreatePage = () => {
         >
           <VStack gap={4}>
             <Input
+              bg={colorMode === "light" ? "white" : "gray.600"}
               placeholder="Product name"
               name="name"
               onChange={(e) =>
@@ -68,6 +69,7 @@ const CreatePage = () => {
               value={newProduct.name}
             />
             <Input
+              bg={colorMode === "light" ? "white" : "gray.600"}
               placeholder="Price"
               name="price"
               onChange={(e) =>
@@ -76,6 +78,7 @@ const CreatePage = () => {
               value={newProduct.price}
             />
             <Input
+              bg={colorMode === "light" ? "white" : "gray.600"}
               placeholder="Image URL"
               name="image"
               onChange={(e) =>
