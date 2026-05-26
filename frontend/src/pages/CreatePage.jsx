@@ -39,6 +39,11 @@ const CreatePage = () => {
         closable: true,
       });
     }
+    setNewProduct({
+      name: "",
+      price: "",
+      image: "",
+    });
   };
   return (
     <Container maxW={"container.sm"}>
@@ -60,6 +65,7 @@ const CreatePage = () => {
               onChange={(e) =>
                 setNewProduct({ ...newProduct, name: e.target.value })
               }
+              value={newProduct.name}
             />
             <Input
               placeholder="Price"
@@ -67,6 +73,7 @@ const CreatePage = () => {
               onChange={(e) =>
                 setNewProduct({ ...newProduct, price: e.target.value })
               }
+              value={newProduct.price}
             />
             <Input
               placeholder="Image URL"
@@ -74,6 +81,7 @@ const CreatePage = () => {
               onChange={(e) =>
                 setNewProduct({ ...newProduct, image: e.target.value })
               }
+              value={newProduct.image}
             />
             <Button
               colorPalette={"blue"}
