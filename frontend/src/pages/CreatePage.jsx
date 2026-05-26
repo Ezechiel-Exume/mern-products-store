@@ -1,3 +1,4 @@
+import { useProductStore } from "../store/product";
 import { useColorMode } from "../components/ui/color-mode";
 import {
   Box,
@@ -17,8 +18,11 @@ const CreatePage = () => {
   });
   const { colorMode } = useColorMode();
 
-  const handleAddNewProduct = () => {
-    console.log(newProduct);
+  const { createProduct } = useProductStore();
+
+  const handleAddNewProduct = async () => {
+    const { success, message } = await createProduct(newProduct);
+    console.log(success, message);
   };
   return (
     <Container maxW={"container.sm"}>
