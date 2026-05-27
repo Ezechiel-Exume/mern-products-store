@@ -9,9 +9,31 @@ import {
 import { CiEdit } from "react-icons/ci";
 import { MdDelete } from "react-icons/md";
 import { useColorMode } from "./ui/color-mode";
+import { useProductStore } from "../store/product";
+import { toaster } from "./ui/toaster";
 
 const ProductCard = ({ product }) => {
   const { colorMode } = useColorMode();
+  const { deleteProduct } = useProductStore();
+
+  const handleDeleteProduct = async (pid) => {
+    const { success, message } = await deleteProduct(pid);
+    if (!success) {
+      toaster.create({
+        title: "Error",
+        description: message,
+        type: "error",
+        closable: true,
+      });
+    } else {
+      toaster.create({
+        title: "Success",
+        description: message,
+        type: "success",
+        closable: true,
+      });
+    }
+  };
   return (
     <Box
       shadow={"lg"}
@@ -44,7 +66,7 @@ const ProductCard = ({ product }) => {
           <IconButton>
             <CiEdit />
           </IconButton>
-          <IconButton>
+          <IconButton onClick={() => handleDeleteProduct(product._id)}>
             <MdDelete />
           </IconButton>
         </HStack>
