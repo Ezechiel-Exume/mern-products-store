@@ -27,12 +27,31 @@ import { toaster } from "./ui/toaster";
 import { useState } from "react";
 
 const ProductCard = ({ product }) => {
-  const [updateProduct, setUpdateProduct] = useState(product);
+  const [updatedProduct, setUpdatedProduct] = useState(product);
   const { colorMode } = useColorMode();
-  const { deleteProduct } = useProductStore();
+  const { deleteProduct, updateProduct } = useProductStore();
 
   const handleDeleteProduct = async (pid) => {
     const { success, message } = await deleteProduct(pid);
+    if (!success) {
+      toaster.create({
+        title: "Error",
+        description: message,
+        type: "error",
+        closable: true,
+      });
+    } else {
+      toaster.create({
+        title: "Success",
+        description: message,
+        type: "success",
+        closable: true,
+      });
+    }
+  };
+
+  const handleUpdateProduct = async (pid, updatedProduct) => {
+    const { success, message } = await updateProduct(pid, updatedProduct);
     if (!success) {
       toaster.create({
         title: "Error",
@@ -97,19 +116,37 @@ const ProductCard = ({ product }) => {
                           bg={colorMode === "light" ? "white" : "gray.600"}
                           placeholder="Product name"
                           name="name"
-                          value={updateProduct.name}
+                          value={updatedProduct.name}
+                          onChange={(e) =>
+                            setUpdatedProduct({
+                              ...updatedProduct,
+                              name: e.target.value,
+                            })
+                          }
                         />
                         <Input
                           bg={colorMode === "light" ? "white" : "gray.600"}
                           placeholder="Price"
                           name="price"
-                          value={updateProduct.price}
+                          value={updatedProduct.price}
+                          onChange={(e) =>
+                            setUpdatedProduct({
+                              ...updatedProduct,
+                              price: e.target.value,
+                            })
+                          }
                         />
                         <Input
                           bg={colorMode === "light" ? "white" : "gray.600"}
                           placeholder="Image URL"
                           name="image"
-                          value={updateProduct.image}
+                          value={updatedProduct.image}
+                          onChange={(e) =>
+                            setUpdatedProduct({
+                              ...updatedProduct,
+                              image: e.target.value,
+                            })
+                          }
                         />
                       </VStack>
                     </DialogBody>
@@ -117,9 +154,19 @@ const ProductCard = ({ product }) => {
                       <Dialog.ActionTrigger asChild>
                         <Button variant={"outline"}>Cancel</Button>
                       </Dialog.ActionTrigger>
-                      <Button background="linear-gradient(to left, cyan, blue)">
-                        Save
-                      </Button>
+                      <Dialog.ActionTrigger asChild>
+                        <Button
+                          variant={"outline"}
+                          onClick={() =>
+                            handleUpdateProduct(
+                              updatedProduct._id,
+                              updatedProduct,
+                            )
+                          }
+                        >
+                          Update
+                        </Button>
+                      </Dialog.ActionTrigger>
                     </DialogFooter>
                     <Dialog.CloseTrigger asChild>
                       <CloseButton />
