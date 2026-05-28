@@ -1,18 +1,33 @@
 import {
   Box,
+  Button,
+  CloseButton,
+  Dialog,
+  DialogBackdrop,
+  DialogBody,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogPositioner,
+  DialogTitle,
   Heading,
   HStack,
   IconButton,
   Image,
+  Input,
+  Portal,
   Text,
+  VStack,
 } from "@chakra-ui/react";
 import { CiEdit } from "react-icons/ci";
 import { MdDelete } from "react-icons/md";
 import { useColorMode } from "./ui/color-mode";
 import { useProductStore } from "../store/product";
 import { toaster } from "./ui/toaster";
+import { useState } from "react";
 
 const ProductCard = ({ product }) => {
+  const [updateProduct, setUpdateProduct] = useState(product);
   const { colorMode } = useColorMode();
   const { deleteProduct } = useProductStore();
 
@@ -63,9 +78,58 @@ const ProductCard = ({ product }) => {
           ${product.price}
         </Text>
         <HStack gap={2}>
-          <IconButton>
-            <CiEdit />
-          </IconButton>
+          <Dialog.Root>
+            <Dialog.Trigger asChild>
+              <IconButton>
+                <CiEdit />
+              </IconButton>
+            </Dialog.Trigger>
+            <Portal>
+              <DialogBackdrop>
+                <DialogPositioner>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>Update Product</DialogTitle>
+                    </DialogHeader>
+                    <DialogBody>
+                      <VStack gap={4}>
+                        <Input
+                          bg={colorMode === "light" ? "white" : "gray.600"}
+                          placeholder="Product name"
+                          name="name"
+                          value={updateProduct.name}
+                        />
+                        <Input
+                          bg={colorMode === "light" ? "white" : "gray.600"}
+                          placeholder="Price"
+                          name="price"
+                          value={updateProduct.price}
+                        />
+                        <Input
+                          bg={colorMode === "light" ? "white" : "gray.600"}
+                          placeholder="Image URL"
+                          name="image"
+                          value={updateProduct.image}
+                        />
+                      </VStack>
+                    </DialogBody>
+                    <DialogFooter>
+                      <Dialog.ActionTrigger asChild>
+                        <Button variant={"outline"}>Cancel</Button>
+                      </Dialog.ActionTrigger>
+                      <Button background="linear-gradient(to left, cyan, blue)">
+                        Save
+                      </Button>
+                    </DialogFooter>
+                    <Dialog.CloseTrigger asChild>
+                      <CloseButton />
+                    </Dialog.CloseTrigger>
+                  </DialogContent>
+                </DialogPositioner>
+              </DialogBackdrop>
+            </Portal>
+          </Dialog.Root>
+
           <IconButton onClick={() => handleDeleteProduct(product._id)}>
             <MdDelete />
           </IconButton>
